@@ -1,0 +1,47 @@
+<!doctype html>
+<!-- OAuth return page (HubSpot). It holds no secret and stores nothing. It checks that the address inside `state` is the
+     app's own Forge web trigger, then POSTs the one-time code there, so the code does not stay in the address bar or history. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-tFmvmMt3UEZ8Jx5rjNsd7e/LcNV2OTIawhVjDkjT1N4='; form-action https://63d80931-a8bb-4c0c-8f29-cb3bddf0652c.hello.atlassian-dev.net; base-uri 'none'">
+  <title>Connecting…</title>
+</head>
+<body>
+  <p id="msg">Connecting…</p>
+  <form id="relay" method="post" hidden>
+    <input type="hidden" name="code">
+    <input type="hidden" name="state">
+  </form>
+  <script>
+    (function () {
+      // Forge web trigger hosts of the apps allowed to receive the code (one host per app: <app id>.hello.atlassian-dev.net).
+      var APP_HOSTS = ['63d80931-a8bb-4c0c-8f29-cb3bddf0652c.hello.atlassian-dev.net'];
+      var msg = document.getElementById('msg');
+      function fail(reason) { msg.textContent = 'Could not connect (' + reason + '). Start again from the app settings in Jira.'; }
+      var q = new URLSearchParams(location.search);
+      if (q.get('error')) return fail(q.get('error'));
+      var code = q.get('code');
+      var state = q.get('state');
+      if (!code || !state) return fail('missing code or state');
+      var target;
+      try {
+        var b64 = state.replace(/-/g, '+').replace(/_/g, '/');
+        target = new URL(JSON.parse(atob(b64 + '==='.slice((b64.length + 3) % 4))).u);
+      } catch (e) {
+        return fail('bad state');
+      }
+      if (target.protocol !== 'https:' || APP_HOSTS.indexOf(target.hostname) < 0) return fail('unexpected return address');
+      history.replaceState(null, '', location.pathname);
+      var form = document.getElementById('relay');
+      form.action = target.href;
+      form.elements.namedItem('code').value = code;
+      form.elements.namedItem('state').value = state;
+      form.submit();
+    })();
+  </script>
+</body>
+</html>
