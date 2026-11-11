@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="no-referrer">
   <meta name="robots" content="noindex, nofollow">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-tFmvmMt3UEZ8Jx5rjNsd7e/LcNV2OTIawhVjDkjT1N4='; form-action https://63d80931-a8bb-4c0c-8f29-cb3bddf0652c.hello.atlassian-dev.net; base-uri 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-/E5uckSO3BCrOyszOoq4qtztW1W2AeUjhW2HxBnAWJ4='; form-action https://63d80931-a8bb-4c0c-8f29-cb3bddf0652c.hello.atlassian-dev.net https://b5b6d238-5640-43cf-86b0-00a63533cfa8.hello.atlassian-dev.net; base-uri 'none'">
   <title>Connecting…</title>
 </head>
 <body>
@@ -19,7 +19,7 @@
   <script>
     (function () {
       // Forge web trigger hosts of the apps allowed to receive the code (one host per app: <app id>.hello.atlassian-dev.net).
-      var APP_HOSTS = ['63d80931-a8bb-4c0c-8f29-cb3bddf0652c.hello.atlassian-dev.net'];
+      var APP_HOSTS = ['63d80931-a8bb-4c0c-8f29-cb3bddf0652c.hello.atlassian-dev.net', 'b5b6d238-5640-43cf-86b0-00a63533cfa8.hello.atlassian-dev.net'];
       var msg = document.getElementById('msg');
       function fail(reason) { msg.textContent = 'Could not connect (' + reason + '). Start again from the app settings in Jira.'; }
       var q = new URLSearchParams(location.search);
